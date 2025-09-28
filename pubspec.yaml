@@ -1,0 +1,29 @@
+name: riverpod_todo
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_hooks: ^0.21.3+1
+  hooks_riverpod: ^3.0.0
+  uuid: ^4.5.1
+  intl: ^0.20.2
+  collection: ^1.19.1
+  equatable: ^2.0.7
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  custom_lint: ^0.8.0
+  riverpod_lint: ^3.0.0
+
+
+flutter:
+  uses-material-design: true
