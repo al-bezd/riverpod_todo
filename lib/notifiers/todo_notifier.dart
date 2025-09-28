@@ -5,12 +5,10 @@ import 'package:riverpod_todo/repositories/todo_repo.dart';
 import 'package:hooks_riverpod/legacy.dart';
 
 final todoListProvider = StateNotifierProvider((ref) {
-  final todosVM = TodoListNotifier(
+  return TodoListNotifier(
     UnmodifiableListView([]),
     todoRepository: TodoRepository(),
-  );
-  todosVM.init();
-  return todosVM;
+  )..init();
 });
 
 final todoItemProvider = Provider.family<Todo?, String>((ref, uuid) {

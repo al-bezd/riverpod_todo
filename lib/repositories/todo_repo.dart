@@ -13,7 +13,7 @@ class TodoRepository {
   Timer? _saveTimer;
   bool _isInited = false;
 
-  init() async {
+  Future<void> init() async {
     if (_isInited) return;
     _prefs = await SharedPreferences.getInstance();
     _isInited = true;
@@ -46,7 +46,7 @@ class TodoRepository {
       _saveTimer?.cancel();
       _saveTimer = null;
     }
-    _saveTimer = Timer(Duration.zero, () async {
+    _saveTimer = Timer(const Duration(milliseconds: 300), () async {
       await _prefs.setString('todos', jsonEncode(todos));
     });
   }
