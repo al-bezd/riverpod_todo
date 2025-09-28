@@ -17,10 +17,12 @@ class TodoRepository {
     if (_isInited) return;
     _prefs = await SharedPreferences.getInstance();
     _isInited = true;
+    _count = _prefs.getInt('count') ?? 0;
   }
 
-  Todo createNew() {
+  Future<Todo> createNew() async {
     _count++;
+    await _prefs.setInt('count', _count);
     return Todo(
       uuid: _uuid.v4(),
       title: 'new todo #$_count',

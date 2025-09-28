@@ -11,7 +11,7 @@ class TodoList extends ConsumerWidget {
     final todos = ref.watch(todoListProvider);
     return ListView.separated(
       itemBuilder: (context, index) {
-        return TodoListItem(item: todos[index]);
+        return TodoListItem(uuid: todos[index].uuid);
       },
       separatorBuilder: (context, index) => const Divider(),
       itemCount: todos.length,
@@ -20,31 +20,33 @@ class TodoList extends ConsumerWidget {
 }
 
 class TodoListItem extends ConsumerWidget {
-  const TodoListItem({super.key, required this.item});
-  final Todo item;
+  const TodoListItem({super.key, required this.uuid});
+  final String uuid;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final todo = ref.watch(todoItemProvider(uuid));
     final todosVM = ref.read(todoListProvider.notifier);
+    if (todo == null) return const SizedBox.shrink();
     return ListTile(
-      key: ValueKey(item.uuid),
+      key: ValueKey(todo.uuid),
       leading: IconButton(
-        onPressed: () => todosVM.toggleIsDone(item.uuid),
-        icon: item.isDone
+        onPressed: () => todosVM.toggleIsDone(todo.uuid),
+        icon: todo.isDone
             ? Icon(Icons.check_circle_outline)
             : Icon(Icons.circle_outlined),
       ),
       trailing: IconButton(
-        onPressed: () => todosVM.remove(item.uuid),
+        onPressed: () => todosVM.remove(todo.uuid),
         icon: Icon(Icons.remove),
       ),
       title: Text(
-        item.title,
+        todo.title,
         style: TextStyle(
-          decoration: item.isDone ? TextDecoration.lineThrough : null,
+          decoration: todo.isDone ? TextDecoration.lineThrough : null,
         ),
       ),
       subtitle: Text(
-        item.description,
+        todo.description,
         overflow: TextOverflow.fade,
         maxLines: 1, // Ограничиваем одной строкой
         softWrap: false, // Отключаем перенос слов
@@ -58,7 +60,7 @@ class TodoListItem extends ConsumerWidget {
           context: context,
           showDragHandle: true,
           builder: (context) =>
-              SingleChildScrollView(child: EditTodo(todo: item)),
+              SingleChildScrollView(child: EditTodo(todo: todo)),
         );
         if (res != null) todosVM.updateTodo(res);
       },

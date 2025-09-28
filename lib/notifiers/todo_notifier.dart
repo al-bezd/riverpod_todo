@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_todo/models/todo.dart';
 import 'package:riverpod_todo/repositories/todo_repo.dart';
 import 'package:hooks_riverpod/legacy.dart';
@@ -10,6 +11,11 @@ final todoListProvider = StateNotifierProvider((ref) {
   );
   todosVM.init();
   return todosVM;
+});
+
+final todoItemProvider = Provider.family<Todo?, String>((ref, uuid) {
+  final todos = ref.watch(todoListProvider);
+  return todos.firstWhereOrNull((todo) => todo.uuid == uuid);
 });
 
 class TodoListNotifier extends StateNotifier<UnmodifiableListView<Todo>> {
@@ -30,8 +36,8 @@ class TodoListNotifier extends StateNotifier<UnmodifiableListView<Todo>> {
   }
 
   /// Добавление новой туду
-  Todo add() {
-    final newItem = todoRepository.createNew();
+  Future<Todo> add() async {
+    final newItem = await todoRepository.createNew();
     _todosMap[newItem.uuid] = newItem;
     _emit();
 

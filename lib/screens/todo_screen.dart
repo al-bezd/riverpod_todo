@@ -15,7 +15,8 @@ class TodoScreen extends StatelessWidget {
           return FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () async {
-              final item = todosVM.add();
+              final item = await todosVM.add();
+              if (!context.mounted) return;
               final res = await showModalBottomSheet(
                 backgroundColor: Colors.grey[300],
                 enableDrag: true,
@@ -34,4 +35,3 @@ class TodoScreen extends StatelessWidget {
     );
   }
 }
-
