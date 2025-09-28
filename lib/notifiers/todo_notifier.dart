@@ -34,11 +34,10 @@ class TodoListNotifier extends StateNotifier<UnmodifiableListView<Todo>> {
   }
 
   /// Добавление новой туду
-  Future<Todo> add() async {
+  Future<Todo> createNew() async {
     final newItem = await todoRepository.createNew();
     _todosMap[newItem.uuid] = newItem;
     _emit();
-
     return newItem;
   }
 
